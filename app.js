@@ -49,18 +49,31 @@ const store = MongoStore.create({
 store.on("error", () => {
     console.log("ERROR IN MONGO SESSION STORE", err);
 });
+app.set('trust proxy', 1); // tells Express to trust Render's proxy
 
 const sessionOptions = {
     store,
-    secret : process.env.SECRET,
-    resave : false,
-    saveUninitialized : true,
-    cookie : {
-        expires : Date.now() + 1000*60*60*24*3,
-        maxAge : 1000*60*60*24*3,
-        httpOnly : true
+    secret: process.env.SECRET,
+    resave: false,
+    saveUninitialized: false, // should be false in most cases
+    cookie: {
+        maxAge: 1000 * 60 * 60 * 24 * 3, // 3 days
+        httpOnly: true,
+        secure: true,                   //  required for HTTPS (Render)
+        sameSite: "lax"                 //  safe for forms + login
     }
 };
+// const sessionOptions = {
+//     store,
+//     secret : process.env.SECRET,
+//     resave : false,
+//     saveUninitialized : true,
+//     cookie : {
+//         expires : Date.now() + 1000*60*60*24*3,
+//         maxAge : 1000*60*60*24*3,
+//         httpOnly : true
+//     }
+// };
 
 // app.get("/", (req,res) => {
 //     res.send("The root is working");
