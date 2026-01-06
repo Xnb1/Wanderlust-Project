@@ -1,0 +1,13 @@
+
+name: Ping Render App
+
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send request to Render
+        run: curl https://major-project-g5sq.onrender.com/listings
